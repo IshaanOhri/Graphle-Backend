@@ -4,20 +4,31 @@ require('newrelic');
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import Pusher from 'pusher';
+import path from 'path';
 import logger from './logger/config';
 import healthRouter from './api/routes/health';
+import databaseConnect from './database/database';
+import channelRouter from './api/routes/channel';
 
 const app = express();
 
 // CORS
 app.use(cors());
 
+// Serve static files
+app.use(express.static(path.join(__dirname, '/public')));
+
 // Body parser
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // PORT and HOST initialization
 const PORT: number = Number(process.env.PORT);
 const HOST: string = String(process.env.HOST);
+
+// Connect to database
+databaseConnect();
 
 // Morgan configuration
 app.use(
@@ -34,11 +45,9 @@ app.use(
 
 // Import routers
 app.use(healthRouter);
+app.use('/channel', channelRouter);
 
 // Default route
-app.use('*', (req: Request, res: Response) => {
-	res.redirect('/');
-});
 
 app.listen(PORT, HOST, () => {
 	logger.info(`Graphle server listening on http://${HOST}:${PORT}`);

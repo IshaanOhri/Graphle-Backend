@@ -55,9 +55,12 @@
 		"*.{ts,js}": "eslint --fix"
 	},
 	"dependencies": {
+		"@types/mongoose": "^5.7.36",
 		"cors": "^2.8.5",
+		"crypto-random-string": "^3.3.0",
 		"express": "^4.17.1",
 		"log4js": "^6.3.0",
+		"mongoose": "^5.10.7",
 		"morgan": "^1.10.0",
 		"newrelic": "^6.11.0",
 		"pusher": "^3.0.1"
