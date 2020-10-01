@@ -5,6 +5,7 @@ import express, { Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import logger from './logger/config';
+import healthRouter from './api/routes/health';
 
 const app = express();
 
@@ -30,6 +31,9 @@ app.use(
 		return null;
 	})
 );
+
+// Import routers
+app.use(healthRouter);
 
 // Default route
 app.use('*', (req: Request, res: Response) => {
