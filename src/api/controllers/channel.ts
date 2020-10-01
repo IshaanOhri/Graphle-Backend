@@ -1,11 +1,14 @@
 /* eslint-disable no-await-in-loop */
-import { query, Request, Response } from 'express';
+import { Request, Response } from 'express';
 import cryptoRandomString from 'crypto-random-string';
 import Pusher from 'pusher';
 import Channel from '../../modals/Channel';
 import { code, message } from '../../config/messages';
 import { ChannelInterface } from '../../interfaces/Channel';
 import logger from '../../logger/config';
+import Story from '../../modals/Story';
+import { StoryInterface } from '../../interfaces/Story';
+import { StorySnippet } from '../../interfaces/Story-Snippet';
 
 const pusher = new Pusher({
 	appId: String(process.env.PUSHER_APP_ID),
@@ -56,6 +59,25 @@ const createChannel = async (req: Request, res: Response) => {
 		return;
 	}
 
+	const storyInfo: StoryInterface = {
+		channelID,
+		channelName: req.body.channelName,
+		instructorName: req.body.instructorName,
+		story: []
+	};
+
+	try {
+		await Story.create(storyInfo);
+	} catch (err) {
+		logger.error(err);
+		res.status(500).send({
+			success: false,
+			code: code.channelCreation,
+			message: message.channelCreation
+		});
+		return;
+	}
+
 	res.send({
 		success: true,
 		channelInfo: {
@@ -76,13 +98,15 @@ const reciteStory = async (req: Request, res: Response) => {
 		return;
 	}
 
+	const { channelID, query } = req.body;
+
 	// SEND QUERY TO DL MODEL
 
-	const urls = [req.body.query, req.body.query];
+	const urls = [query, query];
 
 	// Send to all active connections
 	try {
-		pusher.trigger(`presence-RKT4MM`, 'my-event', {
+		pusher.trigger(`presence-${channelID}`, 'my-event', {
 			message: urls
 		});
 	} catch (err) {
@@ -99,6 +123,26 @@ const reciteStory = async (req: Request, res: Response) => {
 		success: true,
 		urls
 	});
+
+	const snippet: StorySnippet = {
+		query,
+		urls,
+		createdAt: Date.now()
+	};
+
+	try {
+		const story: any = await Story.findOne({ channelID });
+		story.story.push(snippet);
+
+		await story.save();
+	} catch (err) {
+		logger.error(err);
+		logger.error({
+			success: false,
+			code: code.storyBackup,
+			message: message.storyBackup
+		});
+	}
 };
 
 export { createChannel, reciteStory };

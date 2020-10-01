@@ -10,6 +10,7 @@ import logger from './logger/config';
 import healthRouter from './api/routes/health';
 import databaseConnect from './database/database';
 import channelRouter from './api/routes/channel';
+import pusherRouter from './api/routes/pusher';
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use(
 // Import routers
 app.use(healthRouter);
 app.use('/channel', channelRouter);
+app.use('/pusher', pusherRouter);
 
 // Default route
 
