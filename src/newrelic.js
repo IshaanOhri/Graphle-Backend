@@ -8,11 +8,11 @@ exports.config = {
 	/**
 	 * Array of application names.
 	 */
-	app_name: ['Bulletproof NodeJS Template'],
+	app_name: ['GraphleBackend'],
 	/**
 	 * Your New Relic license key.
 	 */
-	license_key: process.env.NEWRELIC_KEY || 'A',
+	license_key: process.env.NEWRELIC_KEY,
 	/**
 	 * This setting controls distributed tracing.
 	 * Distributed tracing lets you see the path that a request takes through your
