@@ -183,7 +183,8 @@ const joinChannel = async (req: Request, res: Response) => {
 			exist.save();
 			res.render('channel', {
 				sessionID: channelID,
-				participantID
+				participantID,
+				layout: 'channel'
 			});
 		} catch (err) {
 			logger.error(err);
@@ -213,7 +214,6 @@ const leaveChannel = async (req: Request, res: Response) => {
 				exist.participantIDs.splice(index, 1);
 			}
 			exist.save();
-			console.log('redirect');
 			res.redirect('/dashboard');
 		} catch (err) {
 			logger.error(err);
@@ -222,4 +222,83 @@ const leaveChannel = async (req: Request, res: Response) => {
 	}
 };
 
-export { createChannel, reciteStory, joinChannel, leaveChannel };
+const add = async (req: Request, res: Response) => {
+	console.log('Adding');
+	if (!req.query.channelID || !req.query.participantID) {
+		res.send({
+			success: false
+		});
+		return;
+	}
+	const { channelID, participantID } = req.query;
+
+	const exist: any = await Channel.findOne({ channelID });
+
+	if (!exist) {
+		res.send({
+			success: false
+		});
+	} else if (exist.participantIDs.includes(participantID)) {
+		res.send({
+			success: false
+		});
+	} else {
+		try {
+			exist.participantIDs.push(participantID);
+			exist.save();
+			res.send({
+				success: true
+			});
+			return;
+		} catch (err) {
+			logger.error(err);
+			res.send({
+				success: false
+			});
+		}
+	}
+};
+
+const remove = async (req: Request, res: Response) => {
+	console.log('Removing');
+
+	if (!req.query.channelID || !req.query.participantID) {
+		res.send({
+			success: false
+		});
+		return;
+	}
+
+	const { channelID, participantID } = req.query;
+
+	const exist: any = await Channel.findOne({ channelID });
+
+	if (!exist) {
+		res.send({
+			success: false
+		});
+	} else if (!exist.participantIDs.includes(participantID)) {
+		res.send({
+			success: false
+		});
+	} else {
+		try {
+			const index = exist.participantIDs.indexOf(participantID);
+			if (index > -1) {
+				exist.participantIDs.splice(index, 1);
+			}
+			exist.save();
+			res.send({
+				success: true
+			});
+			return;
+		} catch (err) {
+			logger.error(err);
+			res.send({
+				success: false
+			});
+		}
+	}
+};
+
+export { createChannel, reciteStory, joinChannel, leaveChannel, add, remove };

@@ -13,11 +13,14 @@ const pusher = new Pusher({
 const pusherAuth = async (req: Request, res: Response) => {
 	const socketId = req.body.socket_id;
 	const channel = req.body.channel_name;
+
+	const participant: any = req.user;
+
 	const presenceData = {
-		user_id: cryptoRandomString({ length: 6, type: 'distinguishable' }),
+		user_id: participant.participantID,
 		user_info: {
-			name: cryptoRandomString({ length: 6, type: 'distinguishable' }),
-			twitter_id: cryptoRandomString({ length: 6, type: 'distinguishable' })
+			name: participant.displayName,
+			image: participant.image
 		}
 	};
 	const auth = pusher.authenticate(socketId, channel, presenceData);
