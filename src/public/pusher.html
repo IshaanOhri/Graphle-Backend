@@ -16,6 +16,11 @@
 			alert(JSON.stringify(data.message));
 		});
 
+		channel.bind('pusher:member_added', function (member) {
+			// for example:
+			console.log('NEW MEMBER', member.id);
+		});
+
 		channel.bind('pusher:subscription_succeeded', function (members) {
 			// for example
 			console.log(members.count);
