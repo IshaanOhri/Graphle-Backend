@@ -3,7 +3,7 @@ import logger from '../../logger/config';
 import Story from '../../modals/Story';
 
 const login = async (req: Request, res: Response) => {
-	res.render('Login', {
+	res.render('login', {
 		layout: 'login'
 	});
 };
@@ -13,7 +13,7 @@ const dashboard = async (req: Request, res: Response) => {
 
 	try {
 		const stories = await Story.find({ user: user.id }).lean();
-		res.render('Dashboard', {
+		res.render('dashboard', {
 			name: user.firstName,
 			stories
 		});

@@ -58,7 +58,7 @@ app.use(
 // Setup handlebars
 app.engine('.hbs', handlebars({ defaultLayout: 'main', extname: '.hbs' }));
 app.set('view engine', '.hbs');
-app.set('views', path.join(__dirname, '/views'));
+app.set('views', path.join(__dirname, 'views'));
 
 // Express sessions
 app.use(
