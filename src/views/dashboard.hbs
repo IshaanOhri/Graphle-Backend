@@ -4,10 +4,15 @@
 		<div class="card-content">
 			<h5>Enter the Session ID</h5>
 			<br>
-			<input type="text" placeholder="ABC123" required style="text-transform: uppercase;" id="session-id"
-				maxlength="6" onkeypress="return isNumberKey(event)">
+			<input type="text" placeholder="ABC123" style="text-transform: uppercase;" id="session-id" maxlength="6"
+				onkeypress="return isNumberKey(event)" required>
 			<br><br>
-			<button id="join-button" onclick="join()">Join</button>
+			<a href="/channel/join?channelID=document.getElementById('session-id').value&participantID={{participantID}}"
+				onclick="this.href='/channel/join?channelID=' + document.getElementById('session-id').value + '&participantID=' + {{participantID}}"><button
+					id="join-button">Join</button></a>
 		</div>
 	</div>
+</div>
+<div>
+	<button><a href="/auth/logout">Logout</a></button>
 </div>

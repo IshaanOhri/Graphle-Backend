@@ -14,6 +14,7 @@ const dashboard = async (req: Request, res: Response) => {
 	try {
 		const stories = await Story.find({ user: user.id }).lean();
 		res.render('dashboard', {
+			participantID: user.participantID,
 			name: user.firstName,
 			stories
 		});

@@ -19,10 +19,8 @@ const ChannelSchema = new mongoose.Schema({
 	},
 	participantIDs: [
 		{
-			participantID: {
-				type: String,
-				required: true
-			}
+			type: String,
+			required: true
 		}
 	],
 	createdAt: {

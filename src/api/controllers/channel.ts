@@ -164,4 +164,62 @@ const reciteStory = async (req: Request, res: Response) => {
 	});
 };
 
-export { createChannel, reciteStory };
+const joinChannel = async (req: Request, res: Response) => {
+	if (!req.query.channelID || !req.query.participantID) {
+		res.render('error/invalidSessionID');
+		return;
+	}
+	const { channelID, participantID } = req.query;
+
+	const exist: any = await Channel.findOne({ channelID });
+
+	if (!exist) {
+		res.render('error/invalidSessionID');
+	} else if (exist.participantIDs.includes(participantID)) {
+		res.render('error/alreadyJoined');
+	} else {
+		try {
+			exist.participantIDs.push(participantID);
+			exist.save();
+			res.render('channel', {
+				sessionID: channelID,
+				participantID
+			});
+		} catch (err) {
+			logger.error(err);
+			res.render('error/500');
+		}
+	}
+};
+
+const leaveChannel = async (req: Request, res: Response) => {
+	if (!req.query.channelID || !req.query.participantID) {
+		res.render('error/invalidSessionID');
+		return;
+	}
+
+	const { channelID, participantID } = req.query;
+
+	const exist: any = await Channel.findOne({ channelID });
+
+	if (!exist) {
+		res.render('error/invalidSessionID');
+	} else if (!exist.participantIDs.includes(participantID)) {
+		res.render('error/notJoined');
+	} else {
+		try {
+			const index = exist.participantIDs.indexOf(participantID);
+			if (index > -1) {
+				exist.participantIDs.splice(index, 1);
+			}
+			exist.save();
+			console.log('redirect');
+			res.redirect('/dashboard');
+		} catch (err) {
+			logger.error(err);
+			res.render('error/500');
+		}
+	}
+};
+
+export { createChannel, reciteStory, joinChannel, leaveChannel };
