@@ -1,3 +1,4 @@
+import cryptoRandomString from 'crypto-random-string';
 import { Request, Response } from 'express';
 import Pusher from 'pusher';
 
@@ -13,10 +14,10 @@ const pusherAuth = async (req: Request, res: Response) => {
 	const socketId = req.body.socket_id;
 	const channel = req.body.channel_name;
 	const presenceData = {
-		user_id: 'unique_user_id',
+		user_id: cryptoRandomString({ length: 6, type: 'distinguishable' }),
 		user_info: {
-			name: 'Mr Channels',
-			twitter_id: '@pusher'
+			name: cryptoRandomString({ length: 6, type: 'distinguishable' }),
+			twitter_id: cryptoRandomString({ length: 6, type: 'distinguishable' })
 		}
 	};
 	const auth = pusher.authenticate(socketId, channel, presenceData);
