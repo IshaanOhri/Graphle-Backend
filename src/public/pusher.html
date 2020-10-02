@@ -21,6 +21,11 @@
 			console.log('NEW MEMBER', member.id);
 		});
 
+		channel.bind('pusher:member_removed', function (member) {
+			// for example:
+			console.log('REMOVED MEMBER', member.id);
+		});
+
 		channel.bind('pusher:subscription_succeeded', function (members) {
 			// for example
 			console.log(members.count);
