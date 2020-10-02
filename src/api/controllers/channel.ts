@@ -1,7 +1,8 @@
 /* eslint-disable no-await-in-loop */
 import { Request, Response } from 'express';
-import cryptoRandomString from 'crypto-random-string';
+import cryptoRandomString, { async } from 'crypto-random-string';
 import Pusher from 'pusher';
+import fetch from 'node-fetch';
 import Channel from '../../modals/Channel';
 import { code, message } from '../../config/messages';
 import { ChannelInterface } from '../../interfaces/Channel';
@@ -101,48 +102,66 @@ const reciteStory = async (req: Request, res: Response) => {
 	const { channelID, query } = req.body;
 
 	// SEND QUERY TO DL MODEL
+	const body = {
+		caption: query.toLowerCase()
+	};
 
-	const urls = [query, query];
+	const urls: string[] = [];
 
-	// Send to all active connections
-	try {
-		pusher.trigger(`presence-${channelID}`, 'my-event', {
-			message: urls
+	fetch('http://52.146.69.140:5000/generateMultipleImages', {
+		method: 'post',
+		body: JSON.stringify(body),
+		headers: { 'Content-Type': 'application/json' }
+	})
+		.then((response) => response.json())
+		.then(async (json) => {
+			urls.push(json.bird.img1.large);
+			urls.push(json.bird.img2.large);
+			urls.push(json.bird.img3.large);
+			urls.push(json.bird.img4.large);
+			urls.push(json.bird.img5.large);
+			urls.push(json.bird.img6.large);
+
+			// Send to all active connections
+			try {
+				pusher.trigger(`presence-${channelID}`, 'my-event', {
+					message: {
+						query,
+						urls
+					}
+				});
+			} catch (err) {
+				logger.error(err);
+			}
+
+			const snippet: StorySnippet = {
+				query,
+				urls,
+				createdAt: Date.now()
+			};
+
+			try {
+				const story: any = await Story.findOne({ channelID });
+				story.story.push(snippet);
+
+				await story.save();
+			} catch (err) {
+				logger.error(err);
+				logger.error({
+					success: false,
+					code: code.storyBackup,
+					message: message.storyBackup
+				});
+			}
+		})
+		.catch((err) => {
+			logger.error(err);
 		});
-	} catch (err) {
-		logger.error(err);
-		res.status(500).send({
-			success: false,
-			code: code.transmission,
-			message: message.transmission
-		});
-		return;
-	}
 
 	res.send({
 		success: true,
-		urls
+		query
 	});
-
-	const snippet: StorySnippet = {
-		query,
-		urls,
-		createdAt: Date.now()
-	};
-
-	try {
-		const story: any = await Story.findOne({ channelID });
-		story.story.push(snippet);
-
-		await story.save();
-	} catch (err) {
-		logger.error(err);
-		logger.error({
-			success: false,
-			code: code.storyBackup,
-			message: message.storyBackup
-		});
-	}
 };
 
 export { createChannel, reciteStory };

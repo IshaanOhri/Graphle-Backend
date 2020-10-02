@@ -8,7 +8,7 @@ const channelRouter: Router = Router();
 channelRouter.post('/create', createChannel);
 
 // @desc	Recite story
-// @route	POST /channel
-channelRouter.post('/', reciteStory);
+// @route	POST /channel/recite
+channelRouter.post('/recite', reciteStory);
 
 export default channelRouter;
