@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import cryptoRandomString, { async } from 'crypto-random-string';
 import Pusher from 'pusher';
 import fetch from 'node-fetch';
+import _ from 'lodash';
 import Channel from '../../modals/Channel';
 import { code, message } from '../../config/messages';
 import { ChannelInterface } from '../../interfaces/Channel';
@@ -10,6 +11,7 @@ import logger from '../../logger/config';
 import Story from '../../modals/Story';
 import { StoryInterface } from '../../interfaces/Story';
 import { StorySnippet } from '../../interfaces/Story-Snippet';
+import { JoinedParticipant } from '../../interfaces/JoinedParticipant';
 
 const pusher = new Pusher({
 	appId: String(process.env.PUSHER_APP_ID),
@@ -45,7 +47,7 @@ const createChannel = async (req: Request, res: Response) => {
 		channelID,
 		channelName: req.body.channelName,
 		instructorName: req.body.instructorName,
-		participantIDs: []
+		participants: []
 	};
 
 	try {
@@ -169,21 +171,32 @@ const joinChannel = async (req: Request, res: Response) => {
 		res.render('error/invalidSessionID');
 		return;
 	}
-	const { channelID, participantID } = req.query;
+	const { channelID } = req.query;
+
+	// eslint-disable-next-line prefer-destructuring
+	const user: any = req.user;
+
+	const participant: JoinedParticipant = {
+		id: user.participantID,
+		name: user.displayName,
+		image: user.image
+	};
 
 	const exist: any = await Channel.findOne({ channelID });
 
 	if (!exist) {
 		res.render('error/invalidSessionID');
-	} else if (exist.participantIDs.includes(participantID)) {
+	} else if (_.find(exist.participants, { id: user.participantID })) {
 		res.render('error/alreadyJoined');
 	} else {
 		try {
-			exist.participantIDs.push(participantID);
+			exist.participants.push(participant);
 			exist.save();
 			res.render('channel', {
+				instructorName: exist.instructorName,
+				channelName: exist.channelName,
 				sessionID: channelID,
-				participantID,
+				participantID: user.participantID,
 				layout: 'channel'
 			});
 		} catch (err) {
@@ -201,17 +214,27 @@ const leaveChannel = async (req: Request, res: Response) => {
 
 	const { channelID, participantID } = req.query;
 
+	// eslint-disable-next-line prefer-destructuring
+	const user: any = req.user;
+
+	const participant: JoinedParticipant = {
+		id: user.participantID,
+		name: user.displayName,
+		image: user.image
+	};
+
 	const exist: any = await Channel.findOne({ channelID });
 
 	if (!exist) {
 		res.render('error/invalidSessionID');
-	} else if (!exist.participantIDs.includes(participantID)) {
+	} else if (!_.find(exist.participants, { id: user.participantID })) {
 		res.render('error/notJoined');
 	} else {
 		try {
-			const index = exist.participantIDs.indexOf(participantID);
+			const current: any = _.find(exist.participants, { id: user.participantID });
+			const index = exist.participants.indexOf(current);
 			if (index > -1) {
-				exist.participantIDs.splice(index, 1);
+				exist.participants.splice(index, 1);
 			}
 			exist.save();
 			res.redirect('/dashboard');
@@ -301,4 +324,24 @@ const remove = async (req: Request, res: Response) => {
 	}
 };
 
-export { createChannel, reciteStory, joinChannel, leaveChannel, add, remove };
+const participants = async (req: Request, res: Response) => {
+	if (!req.query.channelID) {
+		res.status(404).send({
+			success: false,
+			code: code.wrongParameters,
+			message: message.wrongParameters
+		});
+		return;
+	}
+	const { channelID } = req.query;
+
+	const channel: any = await Channel.findOne({ channelID });
+
+	res.send({
+		success: true,
+		channelID,
+		participants: channel.participants
+	});
+};
+
+export { createChannel, reciteStory, joinChannel, leaveChannel, add, remove, participants };

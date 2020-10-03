@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createChannel, reciteStory, joinChannel, leaveChannel, add, remove } from '../controllers/channel';
+import { createChannel, reciteStory, joinChannel, leaveChannel, add, remove, participants } from '../controllers/channel';
 
 const channelRouter: Router = Router();
 
@@ -26,5 +26,9 @@ channelRouter.get('/add', add);
 // @desc	Remove user from DB
 // @route	GET /channel/remove?channelID=&participantID=
 channelRouter.get('/remove', remove);
+
+// @desc	Participant list
+// @route	GET /channel/participants?channelID=
+channelRouter.get('/participants', participants);
 
 export default channelRouter;
