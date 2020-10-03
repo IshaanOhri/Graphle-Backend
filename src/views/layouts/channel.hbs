@@ -90,6 +90,9 @@
 	});
 
 	channel.bind('pusher:member_removed', function (member) {
+
+		document.getElementById('participants-count').innerHTML = `Participants (${channel.members.count})`;
+
 		const index = members.indexOf(member.info);
 		if (index > -1) {
 			members.splice(index, 1);
