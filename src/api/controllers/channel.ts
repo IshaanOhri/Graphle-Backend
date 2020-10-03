@@ -250,14 +250,25 @@ const leaveChannel = async (req: Request, res: Response) => {
 };
 
 const add = async (req: Request, res: Response) => {
-	console.log('Adding');
 	if (!req.query.channelID || !req.query.participantID) {
 		res.send({
 			success: false
 		});
 		return;
 	}
-	const { channelID, participantID } = req.query;
+
+	let { channelID, participantID } = req.query;
+
+	channelID = String(channelID).toUpperCase();
+
+	// eslint-disable-next-line prefer-destructuring
+	const user: any = req.user;
+
+	const participant: JoinedParticipant = {
+		id: user.participantID,
+		name: user.displayName,
+		image: user.image
+	};
 
 	const exist: any = await Channel.findOne({ channelID });
 
@@ -265,13 +276,13 @@ const add = async (req: Request, res: Response) => {
 		res.send({
 			success: false
 		});
-	} else if (exist.participantIDs.includes(participantID)) {
+	} else if (_.find(exist.participants, { id: user.participantID })) {
 		res.send({
 			success: false
 		});
 	} else {
 		try {
-			exist.participantIDs.push(participantID);
+			exist.participants.push(participant);
 			exist.save();
 			res.send({
 				success: true
@@ -287,8 +298,6 @@ const add = async (req: Request, res: Response) => {
 };
 
 const remove = async (req: Request, res: Response) => {
-	console.log('Removing');
-
 	if (!req.query.channelID || !req.query.participantID) {
 		res.send({
 			success: false
@@ -296,7 +305,9 @@ const remove = async (req: Request, res: Response) => {
 		return;
 	}
 
-	const { channelID, participantID } = req.query;
+	let { channelID, participantID } = req.query;
+
+	channelID = String(channelID).toUpperCase();
 
 	const exist: any = await Channel.findOne({ channelID });
 
@@ -304,15 +315,16 @@ const remove = async (req: Request, res: Response) => {
 		res.send({
 			success: false
 		});
-	} else if (!exist.participantIDs.includes(participantID)) {
+	} else if (!_.find(exist.participants, { id: participantID })) {
 		res.send({
 			success: false
 		});
 	} else {
 		try {
-			const index = exist.participantIDs.indexOf(participantID);
+			const current: any = _.find(exist.participants, { id: participantID });
+			const index = exist.participants.indexOf(current);
 			if (index > -1) {
-				exist.participantIDs.splice(index, 1);
+				exist.participants.splice(index, 1);
 			}
 			exist.save();
 			res.send({

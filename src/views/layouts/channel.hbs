@@ -64,7 +64,6 @@
 		document.getElementById('participants-count').innerHTML = `Participants (${channel.members.count})`;
 
 		var user = document.createElement('div')
-		user.style.margin = '10px'
 
 		var img = document.createElement('img')
 		img.src = member.info.image;
@@ -93,11 +92,19 @@
 
 		document.getElementById('participants-count').innerHTML = `Participants (${channel.members.count})`;
 
+		fetch(`http://localhost:3000/channel/remove?channelID={{sessionID}}&participantID=${member.id}`)
+			.then(function (response) {
+				return response.text();
+			}).then(function (html) {
+				console.log(html);
+			}).catch(function (err) {
+				console.warn('Something went wrong.', err);
+			});
+
 		const index = members.indexOf(member.info);
 		if (index > -1) {
 			members.splice(index, 1);
 		}
-		console.log(members)
 		var user = document.getElementById(member.id);
 		document.getElementById('participants').removeChild(user);
 	});
