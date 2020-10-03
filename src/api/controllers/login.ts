@@ -15,7 +15,8 @@ const dashboard = async (req: Request, res: Response) => {
 		const stories = await Story.find({ user: user.id }).lean();
 		res.render('dashboard', {
 			participantID: user.participantID,
-			name: user.firstName,
+			name: user.displayName,
+			image: user.image,
 			stories
 		});
 	} catch (err) {
