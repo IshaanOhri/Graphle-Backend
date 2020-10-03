@@ -13,6 +13,8 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="/css/style.css" />
 	<title>Graphle</title>
+	<script src="https://kit.fontawesome.com/a076d05399.js"></script>
+	<link rel="icon" type="image/png" href="https://lh5.googleusercontent.com/-Ul7x5yEy5sM/AAAAAAAAAAI/AAAAAAAAAAA/AMZuucll2HOjiwb8b94VFvoDHpmY9Ewi5w/photo.jpg" />
 </head>
 
 <body id="body">
@@ -21,4 +23,11 @@
 		{{{body}}}
 	</div>
 </body>
+<script>
+	const img = document.querySelector("img");
+	img.onclick = function () {
+		this.classList.toggle("active");
+	}
+</script>
+
 </html>

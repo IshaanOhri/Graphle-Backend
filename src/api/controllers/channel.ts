@@ -171,7 +171,9 @@ const joinChannel = async (req: Request, res: Response) => {
 		res.render('error/invalidSessionID');
 		return;
 	}
-	const { channelID } = req.query;
+	let { channelID } = req.query;
+
+	channelID = String(channelID).toUpperCase();
 
 	// eslint-disable-next-line prefer-destructuring
 	const user: any = req.user;

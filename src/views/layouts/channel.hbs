@@ -14,6 +14,7 @@
 	<link rel="stylesheet" href="/css/style.css" />
 	<script src="https://js.pusher.com/7.0/pusher.min.js"></script>
 	<title>Graphle</title>
+	<link rel="icon" type="image/png" href="src/public/favicon.svg" />
 </head>
 
 <body id="body">
@@ -29,10 +30,29 @@
 		cluster: 'ap2'
 	});
 
+	var img1 = document.getElementById('img1');
+	var img2 = document.getElementById('img2');
+	var img3 = document.getElementById('img3');
+	var img4 = document.getElementById('img4');
+	var img5 = document.getElementById('img5');
+	var img6 = document.getElementById('img6');
+	var query = document.getElementById('query');
+
 	var channel = pusher.subscribe(`presence-{{ sessionID }}`);
 	// console.log(channel);
 	channel.bind('my-event', function (data) {
-		alert(JSON.stringify(data.message));
+		const query2 = data.message.query;
+		const urls = data.message.urls;
+
+		console.log(query2)
+		query.innerHTML = query2;
+
+		img1.src = urls[0];
+		img2.src = urls[1];
+		img3.src = urls[2];
+		img4.src = urls[3];
+		img5.src = urls[4];
+		img6.src = urls[5];
 	});
 
 	channel.bind('pusher:member_added', function (member) {
