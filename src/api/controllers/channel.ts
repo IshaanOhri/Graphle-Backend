@@ -199,6 +199,8 @@ const joinChannel = async (req: Request, res: Response) => {
 				channelName: exist.channelName,
 				sessionID: channelID,
 				participantID: user.participantID,
+				name: user.displayName,
+				image: user.image,
 				layout: 'channel'
 			});
 		} catch (err) {

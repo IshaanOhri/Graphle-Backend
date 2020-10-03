@@ -30,6 +30,8 @@
 		cluster: 'ap2'
 	});
 
+	document.getElementById("grid").style.display = '';
+
 	var img1 = document.getElementById('img1');
 	var img2 = document.getElementById('img2');
 	var img3 = document.getElementById('img3');
@@ -54,13 +56,82 @@
 		img6.src = urls[5];
 	});
 
+	const members = []
+
 	channel.bind('pusher:member_added', function (member) {
-		console.log('NEW MEMBER', member.info, member.id);
+		members.push(member.info)
+
+		document.getElementById('participants-count').innerHTML = `Participants (${channel.members.count})`;
+
+		var user = document.createElement('div')
+		user.style.margin = '10px'
+
+		var img = document.createElement('img')
+		img.src = member.info.image;
+		img.style.width = '30px';
+		img.style.height = '30px';
+
+		img.style.marginRight = '10px'
+
+		img.style.borderTopLeftRadius = '50% 50%';
+		img.style.borderTopRightRadius = '50% 50%';
+		img.style.borderBottomLeftRadius = '50% 50%';
+		img.style.borderBottomRightRadius = '50% 50%';
+
+		var name = document.createElement('div')
+
+		name.innerHTML = member.info.name;
+		img.style.display = 'inline'
+		name.style.display = 'inline'
+		user.appendChild(img)
+		user.appendChild(name)
+		user.id = member.id
+		document.getElementById("participants").appendChild(user);
 	});
 
 	channel.bind('pusher:member_removed', function (member) {
-		console.log('REMOVED MEMBER', member.info, member.id);
+		const index = members.indexOf(member.info);
+		if (index > -1) {
+			members.splice(index, 1);
+		}
+		console.log(members)
+		var user = document.getElementById(member.id);
+		document.getElementById('participants').removeChild(user);
 	});
+
+	channel.bind('pusher:subscription_succeeded', function (oldMembers) {
+
+		document.getElementById('participants-count').innerHTML = `Participants (${channel.members.count})`;
+
+		oldMembers.each(function (member) {
+			members.push(member.info)
+
+			var user = document.createElement('div')
+			user.style.margin = '10px'
+
+			var img = document.createElement('img')
+			img.src = member.info.image;
+			img.style.width = '30px';
+			img.style.height = '30px';
+
+			img.style.marginRight = '10px'
+
+			img.style.borderTopLeftRadius = '50% 50%';
+			img.style.borderTopRightRadius = '50% 50%';
+			img.style.borderBottomLeftRadius = '50% 50%';
+			img.style.borderBottomRightRadius = '50% 50%';
+
+			var name = document.createElement('div')
+
+			name.innerHTML = member.info.name;
+			img.style.display = 'inline'
+			name.style.display = 'inline'
+			user.appendChild(img)
+			user.appendChild(name)
+			user.id = member.id
+			document.getElementById("participants").appendChild(user);
+		});
+	})
 
 </script>
 
