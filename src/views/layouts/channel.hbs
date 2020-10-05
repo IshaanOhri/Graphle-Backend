@@ -30,24 +30,32 @@
 		cluster: 'ap2'
 	});
 
-	document.getElementById("grid").style.display = '';
-
 	var img1 = document.getElementById('img1');
 	var img2 = document.getElementById('img2');
 	var img3 = document.getElementById('img3');
 	var img4 = document.getElementById('img4');
 	var img5 = document.getElementById('img5');
 	var img6 = document.getElementById('img6');
-	var query = document.getElementById('query');
 
 	var channel = pusher.subscribe(`presence-{{ sessionID }}`);
 	// console.log(channel);
 	channel.bind('my-event', function (data) {
-		const query2 = data.message.query;
+		const query = data.message.query;
 		const urls = data.message.urls;
 
-		console.log(query2)
+		var i = 0;
+		var speed = 100;
 
+		typeWriter();
+
+		function typeWriter() {
+			if (i < txt.length) {
+				document.getElementById("query").innerHTML += query.charAt(i);
+				i++;
+				setTimeout(typeWriter, speed);
+			}
+		}
+		
 		img1.src = urls[0];
 		img2.src = urls[1];
 		img3.src = urls[2];
