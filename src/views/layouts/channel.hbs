@@ -55,7 +55,7 @@
 				setTimeout(typeWriter, speed);
 			}
 		}
-		
+
 		img1.src = urls[0];
 		img2.src = urls[1];
 		img3.src = urls[2];
@@ -71,27 +71,47 @@
 
 		document.getElementById('participants-count').innerHTML = `Participants (${channel.members.count})`;
 
-		var user = document.createElement('div')
+		var user = document.createElement('table');
+		var tr = document.createElement('tr');
+		var th1 = document.createElement('th');
+		var th2 = document.createElement('th');
 
 		var img = document.createElement('img')
 		img.src = member.info.image;
+
 		img.style.width = '30px';
 		img.style.height = '30px';
-
-		img.style.marginRight = '10px'
 
 		img.style.borderTopLeftRadius = '50% 50%';
 		img.style.borderTopRightRadius = '50% 50%';
 		img.style.borderBottomLeftRadius = '50% 50%';
 		img.style.borderBottomRightRadius = '50% 50%';
 
-		var name = document.createElement('div')
+		th2.style.textAlign = 'left';
+		th1.style.textAlign = 'right';
+		th1.style.width = '30px';
+		user.style.width = '70%';
+		user.style.margin = '0';
+		user.style.position = 'relative';
+		user.style.left = '15%';
 
-		name.innerHTML = member.info.name;
-		img.style.display = 'inline'
-		name.style.display = 'inline'
-		user.appendChild(img)
-		user.appendChild(name)
+		th1.style.border = "0px"
+		th2.style.border = "0px"
+		tr.style.border = "0px"
+		user.style.border = "0px"
+
+		th1.appendChild(img);
+
+		th2.innerHTML = member.info.name;
+
+		th1.style.border = "0px"
+		th2.style.border = "0px"
+		tr.style.border = "0px"
+		user.style.border = "0px"
+
+		tr.appendChild(th1)
+		tr.appendChild(th2)
+		user.appendChild(tr)
 		user.id = member.id
 		document.getElementById("participants").appendChild(user);
 	});
@@ -124,28 +144,42 @@
 		oldMembers.each(function (member) {
 			members.push(member.info)
 
-			var user = document.createElement('div')
-			user.style.margin = '10px'
+			var user = document.createElement('table');
+			var tr = document.createElement('tr');
+			var th1 = document.createElement('th');
+			var th2 = document.createElement('th');
 
 			var img = document.createElement('img')
 			img.src = member.info.image;
+
 			img.style.width = '30px';
 			img.style.height = '30px';
-
-			img.style.marginRight = '10px'
 
 			img.style.borderTopLeftRadius = '50% 50%';
 			img.style.borderTopRightRadius = '50% 50%';
 			img.style.borderBottomLeftRadius = '50% 50%';
 			img.style.borderBottomRightRadius = '50% 50%';
 
-			var name = document.createElement('div')
+			th1.appendChild(img);
 
-			name.innerHTML = member.info.name;
-			img.style.display = 'inline'
-			name.style.display = 'inline'
-			user.appendChild(img)
-			user.appendChild(name)
+			th2.innerHTML = member.info.name;
+
+			th2.style.textAlign = 'left';
+			th1.style.textAlign = 'right';
+			th1.style.width = '30px';
+			user.style.width = '70%';
+			user.style.margin = '0';
+			user.style.position = 'relative';
+			user.style.left = '15%';
+
+			th1.style.border = "0px"
+			th2.style.border = "0px"
+			tr.style.border = "0px"
+			user.style.border = "0px"
+
+			tr.appendChild(th1)
+			tr.appendChild(th2)
+			user.appendChild(tr)
 			user.id = member.id
 			document.getElementById("participants").appendChild(user);
 		});
