@@ -1,0 +1,12 @@
+{
+	"type": "service_account",
+	"project_id": "learning-283013",
+	"private_key_id": "68ed638f7fe92bd10dcdd36a8757c95b7be232c9",
+	"private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDHrtpCsLbN46EB\naBqlPLzRfp2Tfpx+DbCtaH4mdHzrpU0fXDw+zxgpvzNrRB7baP5yIw9wNNbND/ZP\nxPH4NX3XgmGPTaLB+OU7Hwy9MxI6S37isQv4HX/bOoPnWdhSzN7ubqkwX1SHBy2z\nYUo7ukArTz/XmzXT15cr4+jx1kfy0nbL4RwAfIMe29Uo1dSkYUeJma28Bs9Oie2L\neltLe0OnhFKbUW9QFBh75tyYRI+RPI7US2G4K9KFyDD/5Cg/vTrl0GhqTLQm5yRI\nQx5P/GEwehWt/fRRAH648v63zPi3AMl+nAVYNE/P1RpYpwZ1nysDIOaUTLyH8xzO\nh2gu7PmVAgMBAAECggEACJtTi3erHQCBRtqT+MTb+4FrRf0AhY7VR+XuxZnGNKJr\n5yA/LkumLU54WQNeUKxGancBETxFzlkiHb1qMBpJsbtMJzSKc0NzdCvoVFNaNXGz\nX9XIo4KUqXIJOonl1kyxozH1pZY4F3suD99hUde7MI1eBPmZGq76iaVtSfOntZQj\nmUyZrhBPDLOrO5ftdNHbDiHndW7lJmuGPh73DuqcBuOkh1lSbuCPSL0Ki0JYjAhp\nbZtNXHiNp97EKmgZzV2yp9sW07bpqqT77Lx5R9RE3AykSt0U5OYYfRhJ+jViSWZD\n6PAdmZAHmPhdolRONokYSafxXtG2Lvzp2//MW46M1QKBgQD52OXZqt4ManlBS26o\nkmZj4N/9mBh2YT2D+HtF50Yc4I4lO1ieXzwAj41ZrK5xszMr+kTjSST71Z4zvtQS\nR3LPNqkxJjNWIrcFp3SvoKZdDS+3rmgEvKvmqv/u084uXoLP0bwd0ICAXnKizqVP\n6z8l6xHC9x7wxL0CbLlVABewswKBgQDMmbTQXeCKVFDxCRIMk0F6hfLUdgwFIRNm\nCBjtFVoxU0LrlKtzbSJVDI2Tco88jjAz+dRcMolCS0S4iyQa/hsckT1EUu9h9qfl\nhLnzAKN/+bU3FXaZ28Z8jqY5bEj6kY6VD7SlnQDEm6ZxSxjf1yNbO2HzBPgYKvhR\n0r8mTZ1AlwKBgQD5ggnInkKx04LUGiigX9Ow2tnVvxZu4h00teklnhj+raJGvEV7\no0+gn7thWnm7QmJQANbaxCkS9fnPYzsWJhQZq1S7qJKL6o8sLlbxLVX2hzyoCpwG\nXwSsjwiX0R2OYQPx1louzBIIIEoLHKMqdJvTmjVapr9XYqH+0eUjZbxC0QKBgDbC\n6R9gEQpVOPjaqacN/teRZIYzNlJlIPENN8a1EVfkZiPxvdX+HtNOsdIGNopJsGMo\n+grXR9+jj7gpHbfPzWffA9v2qrW4tAV9edutjxVgu30L1JuntD+AWsNB1WKjdNs2\nwe4V0K/OzUTDidvXlFIF2diWuuSVE7OqyZix62XvAoGBAPWB3kvZE+kk5sFsOlWY\n+HEdmFsHXCPuWBbSBVIFWbosPq/v1sRQu3YE82sPdgAXA1HyXRR67ansHASSWya9\nK7LKvJOmEEP2fdsoPE7U9CTte534QX+1dvgrSHga5efJtMWruZm7XTKwBgRed6iL\nKs7DqsX3I1mSkRJmpDXPpFzd\n-----END PRIVATE KEY-----\n",
+	"client_email": "graphle@learning-283013.iam.gserviceaccount.com",
+	"client_id": "102559120806528954340",
+	"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+	"token_uri": "https://oauth2.googleapis.com/token",
+	"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+	"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/graphle%40learning-283013.iam.gserviceaccount.com"
+}

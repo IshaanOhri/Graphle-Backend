@@ -55,11 +55,31 @@
 	var img5 = document.getElementById('img5');
 	var img6 = document.getElementById('img6');
 
+	var audio = document.getElementById('audio');
+	var source1 = document.getElementById('source1');
+	var source2 = document.getElementById('source2');
+
+	source1.src = 'https://storage.googleapis.com/graphle-stories/test.mp3';
+	source2.src = 'https://storage.googleapis.com/graphle-stories/test.mp3';
+
+	audio.load();
+	audio.play();
+
 	var channel = pusher.subscribe(`presence-{{ sessionID }}`);
 	// console.log(channel);
 	channel.bind('my-event', function (data) {
+
+		img1.src = "https://i1.wp.com/hubbravissimo.com/wp-content/uploads/2019/07/fff16-862c4e_80c174747b704e778f110260a995cc97mv2.gif?fit=800%2C800&ssl=1&w=640"
+		img2.src = "https://i1.wp.com/hubbravissimo.com/wp-content/uploads/2019/07/fff16-862c4e_80c174747b704e778f110260a995cc97mv2.gif?fit=800%2C800&ssl=1&w=640"
+		img3.src = "https://i1.wp.com/hubbravissimo.com/wp-content/uploads/2019/07/fff16-862c4e_80c174747b704e778f110260a995cc97mv2.gif?fit=800%2C800&ssl=1&w=640"
+		img4.src = "https://i1.wp.com/hubbravissimo.com/wp-content/uploads/2019/07/fff16-862c4e_80c174747b704e778f110260a995cc97mv2.gif?fit=800%2C800&ssl=1&w=640"
+		img5.src = "https://i1.wp.com/hubbravissimo.com/wp-content/uploads/2019/07/fff16-862c4e_80c174747b704e778f110260a995cc97mv2.gif?fit=800%2C800&ssl=1&w=640"
+		img6.src = "https://i1.wp.com/hubbravissimo.com/wp-content/uploads/2019/07/fff16-862c4e_80c174747b704e778f110260a995cc97mv2.gif?fit=800%2C800&ssl=1&w=640"
+
 		const query = data.message.query;
 		const urls = data.message.urls;
+
+		document.getElementById("query").innerHTML = "";
 
 		var i = 0;
 		var speed = 100;
@@ -67,7 +87,7 @@
 		typeWriter();
 
 		function typeWriter() {
-			if (i < txt.length) {
+			if (i < query.length) {
 				document.getElementById("query").innerHTML += query.charAt(i);
 				i++;
 				setTimeout(typeWriter, speed);
