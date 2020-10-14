@@ -27,7 +27,7 @@ const pusher: Pusher = new Pusher({
 });
 
 const projectId: string = String(process.env.GOOGLE_CLOUD_PROJECT_ID);
-const keyFilename: string = 'src/learning-283013-9b7177e8ca72.json';
+const keyFilename: string = 'learning-283013-9b7177e8ca72.json';
 
 const storage: Storage = new Storage({ projectId, keyFilename });
 const client = new TextToSpeechClient({ projectId, keyFilename });
