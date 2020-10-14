@@ -1,0 +1,36 @@
+name: Graphle Backend NLP
+
+on:
+    push:
+        branches:
+            - nlp
+
+jobs:
+    build:
+        runs-on: NLP
+
+        strategy:
+            matrix:
+                node-version: [14.x]
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v1
+              with:
+                  node-version: ${{ matrix.node-version }}
+            - name: Cache Node.js modules
+              uses: actions/cache@v2
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
+            - name: Installing Packages
+              run: npm install
+            - name: Build to JS
+              run: npm run-script build
+            - name: Restart PM2
+              run: |
+                  cp ../../../../ecosystem.config.js .
+                  npm start
