@@ -78,7 +78,7 @@
 
 		const query = data.message.query;
 		const urls = data.message.urls;
-		
+
 		document.getElementById("query").innerHTML = "";
 
 		var i = 0;
@@ -158,7 +158,7 @@
 
 		document.getElementById('participants-count').innerHTML = `Participants (${channel.members.count})`;
 
-		fetch(`http://localhost:3000/channel/remove?channelID={{sessionID}}&participantID=${member.id}`)
+		fetch(`https://graphle.ml/channel/remove?channelID={{sessionID}}&participantID=${member.id}`)
 			.then(function (response) {
 				return response.text();
 			}).then(function (html) {
