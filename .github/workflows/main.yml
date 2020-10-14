@@ -31,7 +31,7 @@ jobs:
             - name: Build to JS
               run: npm run-script build
             - name: Restart PM2
-			  run: |
-			  	  cp ../../../../ecosystem.config.js .
-				  cp ../../../../learning-283013-9b7177e8ca72.json ./src
+              run: |
+                  cp ../../../../ecosystem.config.js .
+                  cp ../../../../learning-283013-9b7177e8ca72.json ./src
                   npm start
