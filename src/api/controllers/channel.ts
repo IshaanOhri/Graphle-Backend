@@ -4,9 +4,10 @@ import cryptoRandomString, { async } from 'crypto-random-string';
 import Pusher from 'pusher';
 import fetch from 'node-fetch';
 import _ from 'lodash';
-import multer, { Multer } from 'multer';
-import fs from 'fs';
 import { Storage } from '@google-cloud/storage';
+import { TextToSpeechClient } from '@google-cloud/text-to-speech';
+import util from 'util';
+import fs from 'fs';
 import Channel from '../../modals/Channel';
 import { code, message } from '../../config/messages';
 import { ChannelInterface } from '../../interfaces/Channel';
@@ -25,13 +26,11 @@ const pusher: Pusher = new Pusher({
 	useTLS: true
 });
 
-// Initialize Multer
-const upload: Multer = multer({ limits: { fileSize: 5000000 } });
-
 const projectId: string = String(process.env.GOOGLE_CLOUD_PROJECT_ID);
-const keyFilename: string = 'src/Learning-68ed638f7fe9.json';
+const keyFilename: string = 'src/learning-283013-9b7177e8ca72.json';
 
 const storage: Storage = new Storage({ projectId, keyFilename });
+const client = new TextToSpeechClient({ projectId, keyFilename });
 
 const bucket = storage.bucket(String(process.env.GOOGLE_CLOUD_BUCKET));
 
@@ -115,155 +114,100 @@ const reciteStory = async (req: Request, res: Response) => {
 		return;
 	}
 
-	// if (req.file.mimetype !== 'audio/mpeg') {
-	// 	res.status(400).send({
-	// 		success: false,
-	// 		code: code.invalidFileType,
-	// 		message: message.invalidFileType
-	// 	});
-	// }
-
-	// const blob = bucket.file(`/ABC/${req.file.originalname}`);
-
-	// const blobStream = blob.createWriteStream({
-	// 	metadata: {
-	// 		contentType: req.file.mimetype
-	// 	}
-	// });
-
-	// blobStream.on('error', (err) => {
-	// 	res.status(500).send({
-	// 		success: false,
-	// 		code: code.serverError,
-	// 		message: message.serverError
-	// 	});
-	// });
-
-	// let audio: string;
-	// blobStream.on('finish', () => {
-	// 	// The public URL can be used to directly access the file via HTTP.
-	// 	audio = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
-
-	// 	// Make the image public to the web (since we'll be displaying it in browser)
-	// 	blob.makePublic().then(() => {});
-	// });
-
-	// blobStream.end(req.file.buffer);
-
 	const { channelID, query } = req.body;
 
-	// SEND QUERY TO DL MODEL
-	const body = {
-		caption: query.toLowerCase()
+	// Text to Speech
+
+	const settings: any = {
+		audioConfig: { audioEncoding: 'MP3', speakingRate: 0.7 },
+		input: {
+			text: query
+		},
+		voice: { languageCode: 'en-US', name: 'en-IN-Wavenet-A' }
 	};
 
-	const urls: string[] = [];
+	const [response] = await client.synthesizeSpeech(settings);
 
-	// fetch('http://52.146.69.140:5000/generateMultipleImages', {
-	// 	method: 'post',
-	// 	body: JSON.stringify(body),
-	// 	headers: { 'Content-Type': 'application/json' }
-	// })
-	// 	.then((response) => response.json())
-	// 	.then(async (json) => {
-	// 		urls.push(json.bird.img1.large);
-	// 		urls.push(json.bird.img2.large);
-	// 		urls.push(json.bird.img3.large);
-	// 		urls.push(json.bird.img4.large);
-	// 		urls.push(json.bird.img5.large);
-	// 		urls.push(json.bird.img6.large);
+	const blob = bucket.file(`${channelID}/${Date.now()}.mp3`);
 
-	// 		// Send to all active connections
-	// 		try {
-	// 			pusher.trigger(`presence-${channelID}`, 'my-event', {
-	// 				message: {
-	// 					query,
-	// 					urls
-	// 				}
-	// 			});
-	// 		} catch (err) {
-	// 			logger.error(err);
-	// 		}
-
-	// 		const snippet: StorySnippet = {
-	// 			query,
-	// 			urls,
-	// 			createdAt: Date.now()
-	// 		};
-
-	// 		try {
-	// 			const story: any = await Story.findOne({ channelID });
-	// 			story.story.push(snippet);
-
-	// 			await story.save();
-	// 		} catch (err) {
-	// 			logger.error(err);
-	// 			logger.error({
-	// 				success: false,
-	// 				code: code.storyBackup,
-	// 				message: message.storyBackup
-	// 			});
-	// 		}
-	// 	})
-	// 	.catch((err) => {
-	// 	logger.error(err);
-	// });
-
-	const bingAPIkey: string = String(process.env.BING_API_KEY);
-
-	fetch(`https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${query.toLowerCase()}&count=6&imageType=Clipart`, {
-		method: 'GET',
-		headers: {
-			'Ocp-Apim-Subscription-Key': bingAPIkey
+	const blobStream = blob.createWriteStream({
+		metadata: {
+			contentType: 'audio/mpeg'
 		}
-	})
-		.then((response) => response.json())
-		.then(async (json) => {
-			const j = json.value;
-			_.forEach(j, (element) => {
-				urls.push(element.thumbnailUrl);
-			});
-			console.log(urls);
-			// Send to all active connections
-			try {
-				pusher.trigger(`presence-${channelID}`, 'my-event', {
-					message: {
-						query,
-						urls
-					}
-				});
-			} catch (err) {
-				logger.error(err);
-			}
+	});
 
-			const snippet: StorySnippet = {
-				query,
-				urls,
-				createdAt: Date.now()
-			};
+	await blobStream.on('error', (err) => {
+		console.log('err');
+		console.log(err);
+	});
 
-			try {
-				const story: any = await Story.findOne({ channelID });
-				story.story.push(snippet);
+	const audio: string = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+	await blobStream.on('finish', () => {
+		// Make the image public to the web (since we'll be displaying it in browser)
+		blob.makePublic().then(() => {});
 
-				await story.save();
-			} catch (err) {
-				logger.error(err);
-				logger.error({
-					success: false,
-					code: code.storyBackup,
-					message: message.storyBackup
-				});
+		const urls: string[] = [];
+
+		const bingAPIkey: string = String(process.env.BING_API_KEY);
+
+		fetch(`https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${query.toLowerCase()}&count=6&imageType=Clipart`, {
+			method: 'GET',
+			headers: {
+				'Ocp-Apim-Subscription-Key': bingAPIkey
 			}
 		})
-		.catch((err) => {
-			logger.error(err);
-		});
+			.then((resp) => resp.json())
+			.then(async (json) => {
+				const j = json.value;
+				_.forEach(j, (element) => {
+					urls.push(element.thumbnailUrl);
+				});
 
-	res.send({
-		success: true,
-		query
+				// Send to all active connections
+				try {
+					console.log(audio);
+					pusher.trigger(`presence-${channelID}`, 'my-event', {
+						message: {
+							query,
+							urls,
+							audio
+						}
+					});
+				} catch (err) {
+					logger.error(err);
+				}
+
+				const snippet: StorySnippet = {
+					query,
+					urls,
+					createdAt: Date.now()
+				};
+
+				try {
+					const story: any = await Story.findOne({ channelID });
+					story.story.push(snippet);
+
+					await story.save();
+				} catch (err) {
+					logger.error(err);
+					logger.error({
+						success: false,
+						code: code.storyBackup,
+						message: message.storyBackup
+					});
+				}
+			})
+			.catch((err) => {
+				logger.error(err);
+			});
+
+		res.send({
+			success: true,
+			query
+		});
 	});
+
+	await blobStream.end(response.audioContent);
 };
 
 const joinChannel = async (req: Request, res: Response) => {
