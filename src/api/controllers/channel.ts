@@ -36,7 +36,7 @@ const bucket = storage.bucket(String(process.env.GOOGLE_CLOUD_BUCKET));
 
 const createChannel = async (req: Request, res: Response) => {
 	if (!req.body.channelName || !req.body.instructorName) {
-		res.status(404).send({
+		res.status(400).send({
 			success: false,
 			code: code.wrongParameters,
 			message: message.wrongParameters
@@ -106,7 +106,7 @@ const createChannel = async (req: Request, res: Response) => {
 
 const reciteStory = async (req: Request, res: Response) => {
 	if (!req.body.channelID || !req.body.query) {
-		res.status(404).send({
+		res.status(400).send({
 			success: false,
 			code: code.wrongParameters,
 			message: message.wrongParameters
@@ -386,7 +386,7 @@ const remove = async (req: Request, res: Response) => {
 
 const participants = async (req: Request, res: Response) => {
 	if (!req.query.channelID) {
-		res.status(404).send({
+		res.status(400).send({
 			success: false,
 			code: code.wrongParameters,
 			message: message.wrongParameters
