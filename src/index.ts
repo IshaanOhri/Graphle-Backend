@@ -1,6 +1,3 @@
-/* eslint-disable import/first */
-require('newrelic');
-
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
@@ -32,6 +29,9 @@ app.use(express.json());
 // PORT and HOST initialization
 const PORT: number = Number(process.env.PORT);
 const HOST: string = String(process.env.HOST);
+
+console.log(HOST);
+console.log(PORT);
 
 // Initialize passport
 require('./config/passport')(passport);

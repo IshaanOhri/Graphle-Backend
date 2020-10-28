@@ -165,7 +165,6 @@ const reciteStory = async (req: Request, res: Response) => {
 
 				// Send to all active connections
 				try {
-					console.log(audio);
 					pusher.trigger(`presence-${channelID}`, 'my-event', {
 						message: {
 							query,
