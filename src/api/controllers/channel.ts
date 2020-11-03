@@ -150,7 +150,7 @@ const reciteStory = async (req: Request, res: Response) => {
 
 		const bingAPIkey: string = String(process.env.BING_API_KEY);
 
-		fetch(`https://api.cognitive.microsoft.com/bing/v7.0/images/search?q=${query.toLowerCase()}&count=6&imageType=Clipart`, {
+		fetch(`https://api.bing.microsoft.com/v7.0/images/search?q=${query.toLowerCase()}&count=6&imageType=Clipart`, {
 			method: 'GET',
 			headers: {
 				'Ocp-Apim-Subscription-Key': bingAPIkey
