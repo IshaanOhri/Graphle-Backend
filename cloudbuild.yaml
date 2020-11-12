@@ -1,5 +1,9 @@
 steps:
 - name: 'gcr.io/cloud-builders/npm'
+  id: Install packages
+  args:
+   - 'install'
+- name: 'gcr.io/cloud-builders/npm'
   id: Generate build
   args:
    - 'run'
