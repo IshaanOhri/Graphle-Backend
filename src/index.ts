@@ -30,9 +30,6 @@ app.use(express.json());
 const PORT: number = Number(process.env.PORT);
 const HOST: string = String(process.env.HOST);
 
-console.log(HOST);
-console.log(PORT);
-
 // Initialize passport
 require('./config/passport')(passport);
 
@@ -43,17 +40,18 @@ const MongoStore = require('connect-mongo')(session);
 databaseConnect();
 
 // Morgan configuration
-app.use(
-	morgan((tokens, req: Request, res: Response) => {
-		logger.info(
-			`Method: ${tokens.method(req, res)} URL: ${tokens.url(req, res)} Status: ${tokens.status(req, res)} Resp Time: ${tokens['response-time'](
-				req,
-				res
-			)} ms`
-		);
-		return null;
-	})
-);
+if (process.env.NODE_ENV === 'development') {
+	app.use(
+		morgan((tokens, req: Request, res: Response) => {
+			logger.info(
+				`Method: ${tokens.method(req, res)} URL: ${tokens.url(req, res)} Status: ${tokens.status(req, res)} Resp Time: ${tokens[
+					'response-time'
+				](req, res)} ms`
+			);
+			return null;
+		})
+	);
+}
 
 // Setup handlebars
 app.engine('.hbs', handlebars({ defaultLayout: 'main', extname: '.hbs' }));

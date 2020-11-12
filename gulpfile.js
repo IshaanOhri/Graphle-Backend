@@ -1,7 +1,5 @@
 const gulp = require('gulp');
-const minify = require('gulp-minify');
 const preprocess = require('gulp-preprocess');
-const prettyData = require('gulp-pretty-data');
 const clean = require('gulp-clean');
 const newer = require('gulp-newer');
 const ts = require('gulp-typescript');

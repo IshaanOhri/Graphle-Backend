@@ -1,0 +1,26 @@
+version: '3'
+services:
+  graphle:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - 3000:3000
+    volumes:
+      - /usr/app/node_modules
+      - .:/usr/app
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - HOST=0.0.0.0
+      - MONGO_URI=mongodb+srv://IshaanOhri:hello123@cluster.z9xk5.mongodb.net/graphle?retryWrites=true&w=majority
+      - GOOGLE_CLIENT_ID=402782102234-t7j28qti54hbnltbsg3tckfvrtk8teub.apps.googleusercontent.com
+      - GOOGLE_CLIENT_SECRET=xkWzpbqhTyQggJGuK5Dn0I0o
+      - GOOGLE_CALLBACK=/auth/google/callback
+      - PUSHER_APP_ID=1083186
+      - PUSHER_KEY=0b4f958b72ea1f9abde2
+      - PUSHER_SECRET=b3c1ef25ab43a8abed3d
+      - PUSHER_CLUSTER=ap2
+      - BING_API_KEY=375992ea3a754e76b33b7bae726f8f6b
+      - GOOGLE_CLOUD_PROJECT_ID=learning-283013
+      - GOOGLE_CLOUD_BUCKET=graphle-stories
