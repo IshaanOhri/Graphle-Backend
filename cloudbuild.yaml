@@ -32,6 +32,6 @@ steps:
 options:
   substitutionOption: ALLOW_LOOSE
 substitutions:
-  _SERVICE_NAME: cloud-test
-  _DEPLOY_REGION: us-central1
+  _SERVICE_NAME: graphle
+  _DEPLOY_REGION: asia-east1
   _GCR_HOSTNAME: gcr.io
