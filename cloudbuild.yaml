@@ -4,6 +4,6 @@ steps:
 - name: 'gcr.io/cloud-builders/npm'
   args: ['run', 'build']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA', './bin']
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/graphle:$SHORT_SHA', './bin']
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA']
+  args: ['push', 'gcr.io/$PROJECT_ID/graphle:$SHORT_SHA']
