@@ -30,12 +30,14 @@ steps:
       id: Copy public
       args:
           - 'cp'
+          - '-r'
           - './src/public'
           - './bin'
     - name: 'bash'
       id: Copy views
       args:
           - 'cp'
+          - '-r'
           - './src/views'
           - './bin'
     - name: 'gcr.io/cloud-builders/docker'
