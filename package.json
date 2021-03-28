@@ -8,7 +8,7 @@
         "lint": "pretty-quick --staged && lint-staged",
         "dev": "env-cmd -f ./src/config/dev.env nodemon ./src/index.ts",
         "dev:docker": "ts-node ./src/index.ts",
-        "start": "env-cmd -f ./bin/config/dev.env node ./bin/index.js"
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",

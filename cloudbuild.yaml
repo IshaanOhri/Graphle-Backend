@@ -3,18 +3,41 @@ steps:
       id: Install packages
       args:
           - 'install'
+    - name: 'gcr.io/cloud-builders/npm'
+      id: Build
+      args:
+          - 'run'
+          - 'build'
     - name: 'bash'
       id: Copy package.json
       args:
           - 'cp'
           - 'package.json'
-          - './src'
+          - './bin'
     - name: 'bash'
       id: Copy package-lock.json
       args:
           - 'cp'
           - 'package-lock.json'
-          - './src'
+          - './bin'
+    - name: 'bash'
+      id: Copy public
+      args:
+          - 'cp'
+          - './src/public'
+          - './bin'
+    - name: 'bash'
+      id: Copy views
+      args:
+          - 'cp'
+          - './src/views'
+          - './bin'
+    - name: 'bash'
+      id: Copy Dockerfile
+      args:
+          - 'cp'
+          - './src/Dockerfile'
+          - './bin'
     - name: 'gcr.io/cloud-builders/docker'
       id: Build docker image
       args:
@@ -22,7 +45,7 @@ steps:
           - '--no-cache'
           - '-t'
           - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
-          - '.'
+          - './bin'
     - name: 'gcr.io/cloud-builders/docker'
       id: Push docker image to cloud registry
       args:
@@ -44,5 +67,5 @@ options:
     substitutionOption: ALLOW_LOOSE
 substitutions:
     _SERVICE_NAME: graphle
-    _DEPLOY_REGION: asia-east1
+    _DEPLOY_REGION: us-central1
     _GCR_HOSTNAME: gcr.io
