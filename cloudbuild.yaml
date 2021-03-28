@@ -14,6 +14,18 @@ steps:
           - 'cp'
           - './src/Dockerfile'
           - './bin'
+    - name: 'bash'
+      id: Copy package.json
+      args:
+          - 'cp'
+          - 'package.json'
+          - './bin'
+    - name: 'bash'
+      id: Copy package-lock.json
+      args:
+          - 'cp'
+          - 'package-lock.json'
+          - './bin'
     - name: 'gcr.io/cloud-builders/docker'
       id: Build docker image
       args:
