@@ -22,7 +22,7 @@ steps:
           - '--no-cache'
           - '-t'
           - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME:$COMMIT_SHA'
-          - './src'
+          - '.'
     - name: 'gcr.io/cloud-builders/docker'
       id: Push docker image to cloud registry
       args:
