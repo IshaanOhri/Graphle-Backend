@@ -4,10 +4,6 @@ import cryptoRandomString, { async } from 'crypto-random-string';
 import Pusher from 'pusher';
 import fetch from 'node-fetch';
 import _ from 'lodash';
-import { Storage } from '@google-cloud/storage';
-import { TextToSpeechClient } from '@google-cloud/text-to-speech';
-import util from 'util';
-import fs from 'fs';
 import Channel from '../../modals/Channel';
 import { code, message } from '../../config/messages';
 import { ChannelInterface } from '../../interfaces/Channel';
@@ -16,6 +12,8 @@ import Story from '../../modals/Story';
 import { StoryInterface } from '../../interfaces/Story';
 import { StorySnippet } from '../../interfaces/Story-Snippet';
 import { JoinedParticipant } from '../../interfaces/JoinedParticipant';
+import { bucket } from '../../config/cloudStorage';
+import { client } from '../../config/textToSpeech';
 
 // Initialize Pusher
 const pusher: Pusher = new Pusher({
@@ -25,14 +23,6 @@ const pusher: Pusher = new Pusher({
     cluster: String(process.env.PUSHER_CLUSTER),
     useTLS: true
 });
-
-const projectId: string = String(process.env.GOOGLE_CLOUD_PROJECT_ID);
-const keyFilename: string = 'kubernetes-learn-294607-b0b5bf3dfb5f.json';
-
-const storage: Storage = new Storage({ projectId, keyFilename });
-const client = new TextToSpeechClient({ projectId, keyFilename });
-
-const bucket = storage.bucket(String(process.env.GOOGLE_CLOUD_BUCKET));
 
 const createChannel = async (req: Request, res: Response) => {
     if (!req.body.channelName || !req.body.instructorName) {

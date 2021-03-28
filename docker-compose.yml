@@ -22,5 +22,5 @@ services:
       - PUSHER_SECRET=b3c1ef25ab43a8abed3d
       - PUSHER_CLUSTER=ap2
       - BING_API_KEY=375992ea3a754e76b33b7bae726f8f6b
-      - GOOGLE_CLOUD_PROJECT_ID=learning-283013
+      - GOOGLE_CLOUD_PROJECT_ID=graphle-1cd63
       - GOOGLE_CLOUD_BUCKET=graphle-stories
