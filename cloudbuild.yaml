@@ -3,6 +3,18 @@ steps:
       id: Install packages
       args:
           - 'install'
+    - name: 'bash'
+      id: Copy package.json
+      args:
+          - 'cp'
+          - 'package.json'
+          - './src'
+    - name: 'bash'
+      id: Copy package-lock.json
+      args:
+          - 'cp'
+          - 'package-lock.json'
+          - './src'
     - name: 'gcr.io/cloud-builders/docker'
       id: Build docker image
       args:
